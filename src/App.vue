@@ -1,5 +1,6 @@
 <template>
    <div>
+       <Loader :start="load.val"></Loader>
        <ImageUploader/> 
    </div>
 </template>
@@ -7,10 +8,24 @@
 
 <script>
 import ImageUploader from "./components/ImageUploader";
+import Loader from "./components/Loader.vue";
 
 export default {
   components: {
-    ImageUploader
+    ImageUploader,
+     Loader
+  },
+  data() {
+    return  {
+      load: {
+        val: false
+      },
+    }
+  },
+  provide(){
+    return {
+      loader: this.load
+    }
   }
 }
 

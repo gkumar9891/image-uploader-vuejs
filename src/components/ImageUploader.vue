@@ -15,22 +15,26 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
           files: '',
-          images: []
+          images: [],
         }
     },
+    inject: ['loader'],
     methods: {
         selectFile(event) {
-           let file = event.target.files[0];
-           
+          this.loader.val = true;
 
+           let file = event.target.files[0];
            let reader = new FileReader();
            reader.readAsDataURL(file);
            reader.onload = (e) => {
-               this.images.push( e.target.result);
+              this.loader.val = false;
+               this.images.unshift( e.target.result);
+
            }
         
         }
@@ -76,6 +80,7 @@ export default {
         flex-basis: 20%;
         height: 110px;
         padding: 5px;
+        position: relative;
     }
 
     .list img {

@@ -26,6 +26,7 @@ export default {
     inject: ['loader'],
     methods: {
         selectFile(event) {
+          if(event.target.files.length > 0){
           this.loader.val = true;
 
            let file = event.target.files[0];
@@ -37,6 +38,7 @@ export default {
 
            }
         
+          }        
         }
     }
 };

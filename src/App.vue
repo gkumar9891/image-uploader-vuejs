@@ -1,32 +1,21 @@
 <template>
-   <div>
-       <Loader :start="load.val"></Loader>
+      <div>
+       <Loader />
        <ImageUploader/> 
-   </div>
+      </div>
 </template>
 
 
 <script>
 import ImageUploader from "./components/ImageUploader";
-import Loader from "./components/Loader.vue";
+import Loader from "./components/Loader";
 
 export default {
   components: {
     ImageUploader,
-     Loader
+    Loader
   },
-  data() {
-    return  {
-      load: {
-        val: false
-      },
-    }
-  },
-  provide(){
-    return {
-      loader: this.load
-    }
-  }
+
 }
 
 </script>

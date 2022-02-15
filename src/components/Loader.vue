@@ -6,7 +6,11 @@
 
 <script>
 export default {
-    props: ["start"]
+    computed: {
+        start() {
+        return this.$store.getters["loader"];
+        }
+    }
 }
 </script>
 <style scoped>

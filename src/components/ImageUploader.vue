@@ -8,33 +8,68 @@
       <li v-for="image in images"
         :key="image"
       >
-        <img :src="image">
+        <img :src="image" />
       </li>
     </ul>
+
+    <button @click="show = !show">click to show</button>
+    <!-- <Suspense v-if="show"> -->
+      <AsyncImageList v-if="show" />
+       <!-- <template><SkeletonLoader /></template> -->
+    <!-- </Suspense> -->
+    
+   
   </div>
 </template>
 
 <script>
+
+import { defineAsyncComponent } from 'vue';
+import axios from "axios";
+import SkeletonLoader from '../components/SkeletonLoader';
+// import ImageList from '../components/ImageList';
+
+
+const AsyncImageList = defineAsyncComponent({
+  loader: () => new Promise((resolve) => {
+    setTimeout( () => {
+        resolve( import(/* webpackChunkName: "ImageList" */ "../components/ImageList"))
+    }, 2000)
+  }),
+  //() => import("../components/ImageList"),
+  loadingComponent: SkeletonLoader,
+});
 
 export default {
     data() {
         return {
           files: '',
           images: [],
+          show: false
         }
     },
-    inject: ['loader'],
+    components: {
+      AsyncImageList,
+    },
     methods: {
         selectFile(event) {
           if(event.target.files.length > 0){
-          this.loader.val = true;
+          this.$store.commit("showLoader");
 
            let file = event.target.files[0];
            let reader = new FileReader();
            reader.readAsDataURL(file);
            reader.onload = (e) => {
-              this.loader.val = false;
+              this.$store.commit("hideLoader");
                this.images.unshift( e.target.result);
+
+            axios.post("http://localhost:8080/db_source.json", {
+              url: e.target.result
+            } ,{
+              headers: {
+                "Content-type" : "application/json"
+              }
+            });
 
            }
         
